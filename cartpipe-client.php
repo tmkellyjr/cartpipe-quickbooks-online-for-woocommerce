@@ -1,5 +1,5 @@
 <?php
-/*Plugin Name: Cartpipe Client App for WooCommerce & QuickBooks Online
+/*Plugin Name: Cartpipe QuickBooks Online Integration for WooCommerce
 Plugin URI: Cartpipe.com
 Description: Cartpipe Client for WooCommerce / QuickBooks Online Integration
 Author: Cartpipe.com

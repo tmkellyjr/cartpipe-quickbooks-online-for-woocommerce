@@ -3,7 +3,7 @@ Contributors: Cartpipe
 Donate Link: 
 Tags: woocommerce, quickbooks, xero, freshbooks, accounting, ecommerce, integrations
 Requires at least: 3.0.1
-Tested up to: 3.4
+Tested up to: 4.2
 Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html

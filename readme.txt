@@ -22,7 +22,7 @@ Once installed, the plugin will:
 *	Import items from QuickBooks into WooCommerce (requires Premier)
 *	Export items from QuickBooks into WooCommerce (requires Premier)
 
-Once setup, you can schedule the plugin to run on a schedule or manually. In order to connect WooCommerce with QuickBooks Online, you need a Cartpipe account. Cartpipe Basic is free and if you need extended functionality, you can sign-up for either our Standard or Premium Services
+Once setup, you can schedule the plugin to run on a schedule or manually. In order to connect WooCommerce with QuickBooks Online, you need a [Cartpipe account](https://www.cartpipe.com/services/quickbooks-online-integration/ "QuickBooks Online Integration for WooCommerce"). Cartpipe Basic is free and if you need extended functionality, you can sign-up for either our Standard or Premium Services
 
 
 == Installation ==

@@ -1,7 +1,7 @@
 === Plugin Name ===
 Contributors: Cartpipe
 Donate Link: 
-Tags: woocommerce, quickbooks, xero, freshbooks, accounting
+Tags: woocommerce, quickbooks, xero, freshbooks, accounting, ecommerce, integrations
 Requires at least: 3.0.1
 Tested up to: 3.4
 Stable tag: 1.0.8
@@ -36,10 +36,12 @@ Installation / configuration is straightforward.
 1. Enter your Cartpipe Consumer Secret
 1. Enter your Cartpipe License Key
 1. Click the Activate button
-1. From within your Cartpipe.com account, click the Connect to QuickBooks button. This connects the plugin to your QuickBooks Online account
+1. From within your [Cartpipe.com account](https://www.cartpipe.com/account/ "Cartpipe Account"), click the Connect to QuickBooks button. This connects the plugin to your QuickBooks Online account
 
 Once you've gone through those steps, the connection's been made. For product info syncing to occur, you just need to make sure that the WooCommerce sku matches the Item Name in QuickBooks. 
 Customer's auto-map to QuickBooks and sending receipts just requires that you specify a few accounts to use in the pluging, otherwise, that's it. 
+
+Do you need a free account or are interested in upgrading to Standard or Premier? Click [here](https://www.cartpipe.com/services/quickbooks-online-integration/ "QuickBooks Online Integration for WooCommerce") to be taken to Cartpipe.com 
 
 == Frequently Asked Questions ==
 
@@ -47,12 +49,19 @@ Customer's auto-map to QuickBooks and sending receipts just requires that you sp
 
 Yes. You need to have an account to get your Consumer Key, Consumer Secret and License Key. This info allows us to authenticate you and communicate with QuickBooks. Don't worry as a Cartpipe Basic account is free and we offer a 14-day free trial on the Standard account. 
 
+= Where can I signup for Cartpipe? =
+
+You can signup for a Free Cartpipe Account [here](https://www.cartpipe.com/services/quickbooks-online-integration/ "QuickBooks Online Integration for WooCommerce")
+
 = Do I need an QuickBooks Online account? =
 
 Yes. You need to have an account with Intuit for QuickBooks Online. Using Cartpipe does not create a QuickBooks Online account for you.
 
 = Does this work with desktop versions of QuickBooks? =
 No. It only works with QuickBooks Online
+
+
+
 == Screenshots ==
 
 1. Cartpipe settings

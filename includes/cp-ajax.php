@@ -74,14 +74,14 @@ class CP_AJAX {
 	}
 	public static function cp_deactivate_license(){
 		check_ajax_referer( 'cp-options-nonce', 'security' );
-		if(CP()->qbo->license_info->status=="valid" ||  CP()->qbo->license_info->status=="site_inactive" || CP()->qbo->license_info->status == 'inactive' ):
+		//if(CP()->qbo->license_info->status=="valid" ||  CP()->qbo->license_info->status=="site_inactive" || CP()->qbo->license_info->status == 'inactive' ):
 			$client 				= CP()->client;
 			$license_data 			= $client->cp_deactivate_license( CP()->qbo->license, get_home_url() );
 			$qbo 					= maybe_unserialize( get_option('qbo') );
 			$qbo['license_info']	= $license_data;
 			update_option('qbo', $qbo);
 			CP_Messages::add_message('Your license for Cartpipe.com has been deactivated.');
-		endif;
+		//endif;
 			echo ( json_encode($license_data ) );
 		die();
 	}

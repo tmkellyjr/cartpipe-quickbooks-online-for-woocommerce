@@ -3,7 +3,7 @@
 Plugin URI: Cartpipe.com
 Description: Cartpipe Client for WooCommerce / QuickBooks Online Integration
 Author: Cartpipe.com
-Version: 1.0.9
+Version: 1.0.10
 Author URI: Cartpipe.com
 */
 
@@ -302,7 +302,7 @@ if(!class_exists('CP_QBO_Client')){
 				$this->qbo->accounts 		= isset( $accounts ) && $accounts != '' && $accounts ? $accounts : false;
 				$this->client 				= new CP_Client( $this->cp_consumer_key, $this->cp_consumer_secret, $this->cp_url );
 				
-				$license 					= get_transient( 'cartpipe_license_status' );
+				$license 					= false;//get_transient( 'cartpipe_license_status' );
 				$notices 					= get_transient( 'cartpipe_notices' );
 				if ( false === $license ) {
 					$license = $this->client->check_service( $this->qbo->license, get_home_url());

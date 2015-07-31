@@ -64,7 +64,8 @@ class QBO_Settings_Credentials extends QBO_Settings_Page {
 	 */
 	public function get_settings( $current_section = '' ) {
 		//if ( $current_section == 'inventory' ) {
-			switch (CP()->qbo->license_info->status ){//CP()->qbo->license_info->status) {
+			$client 				= CP()->client;
+			switch (CP()->qbo->license_info->status) {
 				case 'site_inactive':
 					if(CP()->qbo->license_info->activated_sites == 'none_activated'){
 						$buttons = array( 
@@ -98,7 +99,7 @@ class QBO_Settings_Credentials extends QBO_Settings_Page {
 					$buttons = array();		
 					break;
 				case 'valid':
-					
+					//var_dump( CP()->qbo->license_info->activated_sites ); 
 					if(CP()->qbo->license_info->activated_sites == 'none_activated'){
 						$buttons = array( 
 								array(
@@ -108,7 +109,7 @@ class QBO_Settings_Credentials extends QBO_Settings_Page {
 								)
 							);
 						$status = sprintf('Please activate Cartpipe for QuickBooks Online for %s.', get_home_url() );
-					}else{
+					 }else{
 						$buttons = array( 
 									array(
 										'url'=> '#', 

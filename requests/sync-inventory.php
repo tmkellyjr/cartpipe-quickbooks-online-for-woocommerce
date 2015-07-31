@@ -105,7 +105,7 @@
 							update_post_meta( $product_id, '_price', $product->price );
 							update_post_meta( $product_id, '_regular_price', $product->price );
 							if($wc_prod->is_type('variable')){
-								WC_Product_Variable::sync( $this->id );
+								WC_Product_Variable::sync( $product_id );
 							}
 						endif;
 					}

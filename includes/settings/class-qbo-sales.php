@@ -40,7 +40,8 @@ class QBO_Settings_Sales extends QBO_Settings_Page {
 		$this->taxes 			= isset( $taxes ) && $taxes != '' && $taxes ? $taxes : CP()->needs['tax_rates'] = true;
 		$this->tax_codes		= isset( $codes ) && $codes != '' && $codes ? $codes : CP()->needs['tax_codes'] = true ;
 		$this->payment_methods	= isset( $payments ) && $payments != '' && $payments ? $payments : CP()->needs['payment_methods'] = true;
-		
+		$client 				= CP()->client;
+		//var_dump(($client->cp_deactivate_license( CP()->qbo->license, get_home_url() )));
 		if(sizeof(CP()->needs) > 0){
 	    	foreach(CP()->needs as $key => $need){
 	    		switch ($key) {
@@ -133,7 +134,8 @@ class QBO_Settings_Sales extends QBO_Settings_Page {
 			$tax_classes			= self::get_tax_classes();
 			$tax_rates 				= self::get_tax_rates();
 			$wc_payment_methods		= self::get_payment_methods();
-			$accounts 				 	= get_option('qbo_accounts', false);
+			$accounts 				= get_option('qbo_accounts', false);
+			$base 					= WC_Countries::get_base_country();
 			if(CP()->qbo->license_info->level == 'Basic'){
 					
 					CPM()->add_message(
@@ -168,142 +170,9 @@ class QBO_Settings_Sales extends QBO_Settings_Page {
 					}
 		    	}
 			}
-			if ( is_plugin_active('woocommerce/woocommerce.php') ) {
-			$settings = apply_filters( 'qbo_sales_settings', array(
-
-				array( 'title' => __( 'QuickBooks Online Order Settings', 'cartpipe' ), 'type' => 'title', 'desc' => '', 'id' => 'qbo_orders' ),
-				array(
-					'title'             => __( 'Order Status Trigger', 'cartpipe' ),
-					'desc'              => __( 'Please select the order status that will trigger the order to be sent to QuickBooks Online.', 'cartpipe' ),
-					'id'                => 'qbo[order_trigger]',
-					'type'              => 'select',
-					'options'			=> wc_get_order_statuses(),
-					'css'               => '',
-					'default'           => '',
-					'autoload'          => false
-				),
-				array(
-					'title'             => __( 'Order Posting Type', 'cartpipe' ),
-					'desc'              => __( 'Please select how you\'d like the order to transfer to QuickBooks Online.', 'cartpipe' ),
-					'id'                => 'qbo[order_type]',
-					'type'              => 'select',
-					'options'			=> array(
-												'sales-receipt'	=>	'Sales Receipt',
-												'invoice'		=>	'Invoice'
-											),
-					'css'               => '',
-					'default'           => '',
-					'autoload'          => false
-				),
-				array(
-					'title'             => __( 'Create Payment in QuickBooks?', 'cartpipe' ),
-					'desc'              => __( 'Would you like to receive a payment on account in QuickBooks once the order has reached a \'completed\' status on the website', 'cartpipe' ),
-					'id'                => 'qbo[create_payment]',
-					'type'              => 'checkbox',
-					'css'               => '',
-					'default'           => '',
-					'dependency'		=> array(
-											'setting'	=> 'qbo[order_type]',
-											'value'		=> 'invoice'
-										),
-					'autoload'          => false
-				),
-				array(
-					'title'             => __( 'Deposit Account', 'cartpipe' ),
-					'desc'              => __( 'Please select the Deposit Account to use for sales receipts and receipt of payments in QuickBooks Online.', 'cartpipe' ),
-					'id'                => 'qbo[deposit_account]',
-					'type'              => 'select',
-					'options'			=> $this->accounts,
-					'css'               => '',
-					'default'           => '',
-					'autoload'          => false
-				),
-					array(
-					'title'			=> __( '', 'cartpipe' ),
-					'desc'          => __( 'Refresh Accounts?', 'cartpipe' ),
-					'label'			 => __( 'Refresh', 'cartpipe' ),
-					//'id'            => 'qbo[sync_stock]',
-					'type'          => 'button',
-					'url'			=> '#',
-					'data-type'		=> 'accounts',
-					'linked'		=> 'qbo[deposit_account]',
-					'class'			=> 'button refresh accounts	',
-					'autoload'      => false
-				),
-				array(
-					'title'             => __( 'Tax Rate Mappings', 'cartpipe' ),
-					'desc'              => __( 'Please map your website tax rates to the corresponding tax rate in QuickBooks Online.', 'cartpipe' ),
-					'id'                => 'qbo[taxes]',
-					'type'              => 'mapping',
-					'options'			=> $this->taxes,//wc_get_order_statuses(),
-					'labels'			=> $tax_rates,
-					'auto_create'		=> true, 
-					'css'               => '',
-					'default'           => '',
-					'autoload'          => false
-				),
-					array(
-					'title'			=> __( '', 'cartpipe' ),
-					'desc'          => __( 'Refresh Tax Rates?', 'cartpipe' ),
-					'label'			 => __( 'Refresh', 'cartpipe' ),
-					//'id'            => 'qbo[sync_stock]',
-					'type'          => 'button',
-					'url'			=> '#',
-					'data-type'		=> 'taxrates',
-					'linked'		=> 'qbo[taxes]',
-					'class'			=> 'button refresh taxrates',
-					'autoload'      => false
-				),
-				array(
-					'title'             => __( 'Tax Code Mappings', 'cartpipe' ),
-					'desc'              => __( 'Please map your website tax classes to the corresponding tax code in QuickBooks Online.', 'cartpipe' ),
-					'id'                => 'qbo[tax_codes]',
-					'type'              => 'mapping',
-					'options'			=> $this->tax_codes,//wc_get_order_statuses(),
-					'labels'			=> $tax_classes,
-					'css'               => '',
-					'default'           => '',
-					'autoload'          => false
-				),
-					array(
-					'title'			=> __( '', 'cartpipe' ),
-					'desc'          => __( 'Refresh Tax Codes?', 'cartpipe' ),
-					'label'         => __( 'Refresh', 'cartpipe' ),
-					//'id'            => 'qbo[sync_stock]',
-					'type'          => 'button',
-					'url'			=> '#',
-					'data-type'		=> 'taxcodes',
-					'linked'		=> 'qbo[tax_codes]',
-					'class'			=> 'button refresh taxcodes',
-					'autoload'      => false
-				),
-				array(
-					'title'             => __( 'Payment Method Mappings', 'cartpipe' ),
-					'desc'              => __( 'Please map your website payment methods to the corresponding payment methods in QuickBooks Online.', 'cartpipe' ),
-					'id'                => 'qbo[payment_methods]',
-					'type'              => 'mapping',
-					'options'			=> $this->payment_methods,//wc_get_order_statuses(),
-					'labels'			=> $wc_payment_methods,
-					'css'               => '',
-					'default'           => '',
-					'autoload'          => false
-				),
-				array(
-					'title'			=> __( '', 'cartpipe' ),
-					'desc'          => __( 'Refresh Payment Methods?', 'cartpipe' ),
-					'label'          => __( 'Refresh', 'cartpipe' ),
-					//'id'            => 'qbo[sync_stock]',
-					'type'          => 'button',
-					'url'			=> '#',
-					'data-type'		=> 'payments',
-					'linked'		=> 'qbo[payment_methods]',
-					'class'			=> 'button refresh payments',
-					'autoload'      => false
-				),
-
-				
-				array( 'type' => 'sectionend', 'id' => 'qbo_orders'),
-			));
+			
+		if ( is_plugin_active('woocommerce/woocommerce.php') ) {
+			$settings = apply_filters( 'qbo_sales_settings', $this->get_country_settings(WC_Countries::get_base_country()));
 		}else{
 			$settings = array();
 			CPM()->add_message('You need to install WooCommerce before you can start using the Cartpipe WooCommerce / QuickBooks Online Integration');
@@ -350,6 +219,353 @@ class QBO_Settings_Sales extends QBO_Settings_Page {
 			}
 		}
 		return $return;
+	}
+	public function get_country_settings( $country ){
+		
+		switch ($country) {
+			case 'US':
+				$return = array(array( 'title' => __( 'QuickBooks Online Order Settings', 'cartpipe' ), 'type' => 'title', 'desc' => '', 'id' => 'qbo_orders' ),
+				array(
+					'title'             => __( 'Order Status Trigger', 'cartpipe' ),
+					'desc'              => __( 'Please select the order status that will trigger the order to be sent to QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[order_trigger]',
+					'type'              => 'select',
+					'options'			=> wc_get_order_statuses(),
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
+				array(
+					'title'             => __( 'Order Posting Type', 'cartpipe' ),
+					'desc'              => __( 'Please select how you\'d like the order to transfer to QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[order_type]',
+					'type'              => 'select',
+					'options'			=> array(
+												'sales-receipt'	=>	'Sales Receipt',
+												'invoice'		=>	'Invoice'
+											),
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
+				array(
+					'title'             => __( 'Create Payment in QuickBooks?', 'cartpipe' ),
+					'desc'              => __( 'Would you like to receive a payment on account in QuickBooks once the order has reached a \'completed\' status on the website', 'cartpipe' ),
+					'id'                => 'qbo[create_payment]',
+					'type'              => 'checkbox',
+					'css'               => '',
+					'default'           => '',
+					'dependency'		=> array(
+											'setting'	=> 'qbo[order_type]',
+											'value'		=> 'invoice'
+										),
+					'autoload'          => false
+				),
+				array(
+					'title'             => __( 'Deposit Account', 'cartpipe' ),
+					'desc'              => __( 'Please select the Deposit Account to use for sales receipts and receipt of payments in QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[deposit_account]',
+					'type'              => 'select',
+					'options'			=> $this->accounts,
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
+				array(
+					'title'			=> __( '', 'cartpipe' ),
+					'desc'          => __( 'Refresh Accounts?', 'cartpipe' ),
+					'label'			 => __( 'Refresh', 'cartpipe' ),
+					//'id'            => 'qbo[sync_stock]',
+					'type'          => 'button',
+					'url'			=> '#',
+					'data-type'		=> 'accounts',
+					'linked'		=> 'qbo[deposit_account]',
+					'class'			=> 'button refresh accounts	',
+					'autoload'      => false
+				),
+				
+				array(
+					'title'             => __( 'Tax Rate Mappings', 'cartpipe' ),
+					'desc'              => __( 'Please map your website tax rates to the corresponding tax rate in QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[taxes]',
+					'type'              => 'mapping',
+					'options'			=> $this->taxes,//wc_get_order_statuses(),
+					'labels'			=> self::get_tax_rates(),
+					'auto_create'		=> true, 
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
+					array(
+					'title'			=> __( '', 'cartpipe' ),
+					'desc'          => __( 'Refresh Tax Rates?', 'cartpipe' ),
+					'label'			 => __( 'Refresh', 'cartpipe' ),
+					//'id'            => 'qbo[sync_stock]',
+					'type'          => 'button',
+					'url'			=> '#',
+					'data-type'		=> 'taxrates',
+					'linked'		=> 'qbo[taxes]',
+					'class'			=> 'button refresh taxrates',
+					'autoload'      => false
+				),
+				
+				array(
+					'title'             => __( 'Tax Code Mappings', 'cartpipe' ),
+					'desc'              => __( 'Please map your website tax classes to the corresponding tax code in QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[tax_codes]',
+					'type'              => 'mapping',
+					'options'			=> $this->tax_codes,//wc_get_order_statuses(),
+					'labels'			=> self::get_tax_classes(),
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
+					array(
+					'title'			=> __( '', 'cartpipe' ),
+					'desc'          => __( 'Refresh Tax Codes?', 'cartpipe' ),
+					'label'         => __( 'Refresh', 'cartpipe' ),
+					//'id'            => 'qbo[sync_stock]',
+					'type'          => 'button',
+					'url'			=> '#',
+					'data-type'		=> 'taxcodes',
+					'linked'		=> 'qbo[tax_codes]',
+					'class'			=> 'button refresh taxcodes',
+					'autoload'      => false
+				),
+			
+			
+				array(
+					'title'             => __( 'Payment Method Mappings', 'cartpipe' ),
+					'desc'              => __( 'Please map your website payment methods to the corresponding payment methods in QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[payment_methods]',
+					'type'              => 'mapping',
+					'options'			=> $this->payment_methods,//wc_get_order_statuses(),
+					'labels'			=> self::get_payment_methods(),
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
+				array(
+					'title'			=> __( '', 'cartpipe' ),
+					'desc'          => __( 'Refresh Payment Methods?', 'cartpipe' ),
+					'label'          => __( 'Refresh', 'cartpipe' ),
+					//'id'            => 'qbo[sync_stock]',
+					'type'          => 'button',
+					'url'			=> '#',
+					'data-type'		=> 'payments',
+					'linked'		=> 'qbo[payment_methods]',
+					'class'			=> 'button refresh payments',
+					'autoload'      => false
+				),
+
+				
+				array( 'type' => 'sectionend', 'id' => 'qbo_orders'),
+				);
+				break;
+			case 'CA':
+				$return = array(array( 'title' => __( 'QuickBooks Online Order Settings', 'cartpipe' ), 'type' => 'title', 'desc' => '', 'id' => 'qbo_orders' ),
+				array(
+					'title'             => __( 'Order Status Trigger', 'cartpipe' ),
+					'desc'              => __( 'Please select the order status that will trigger the order to be sent to QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[order_trigger]',
+					'type'              => 'select',
+					'options'			=> wc_get_order_statuses(),
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
+				array(
+					'title'             => __( 'Order Posting Type', 'cartpipe' ),
+					'desc'              => __( 'Please select how you\'d like the order to transfer to QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[order_type]',
+					'type'              => 'select',
+					'options'			=> array(
+												'sales-receipt'	=>	'Sales Receipt',
+												'invoice'		=>	'Invoice'
+											),
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
+				array(
+					'title'             => __( 'Create Payment in QuickBooks?', 'cartpipe' ),
+					'desc'              => __( 'Would you like to receive a payment on account in QuickBooks once the order has reached a \'completed\' status on the website', 'cartpipe' ),
+					'id'                => 'qbo[create_payment]',
+					'type'              => 'checkbox',
+					'css'               => '',
+					'default'           => '',
+					'dependency'		=> array(
+											'setting'	=> 'qbo[order_type]',
+											'value'		=> 'invoice'
+										),
+					'autoload'          => false
+				),
+				array(
+					'title'             => __( 'Deposit Account', 'cartpipe' ),
+					'desc'              => __( 'Please select the Deposit Account to use for sales receipts and receipt of payments in QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[deposit_account]',
+					'type'              => 'select',
+					'options'			=> $this->accounts,
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
+				array(
+					'title'			=> __( '', 'cartpipe' ),
+					'desc'          => __( 'Refresh Accounts?', 'cartpipe' ),
+					'label'			 => __( 'Refresh', 'cartpipe' ),
+					//'id'            => 'qbo[sync_stock]',
+					'type'          => 'button',
+					'url'			=> '#',
+					'data-type'		=> 'accounts',
+					'linked'		=> 'qbo[deposit_account]',
+					'class'			=> 'button refresh accounts	',
+					'autoload'      => false
+				),
+				
+				array(
+					'title'             => __( 'Tax Rate Mappings', 'cartpipe' ),
+					'desc'              => __( 'Please map your website tax rates to the corresponding tax rate in QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[taxes]',
+					'type'              => 'mapping',
+					'options'			=> $this->taxes,//wc_get_order_statuses(),
+					'labels'			=> self::get_tax_rates(),
+					'auto_create'		=> true, 
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
+					array(
+					'title'			=> __( '', 'cartpipe' ),
+					'desc'          => __( 'Refresh Tax Rates?', 'cartpipe' ),
+					'label'			 => __( 'Refresh', 'cartpipe' ),
+					//'id'            => 'qbo[sync_stock]',
+					'type'          => 'button',
+					'url'			=> '#',
+					'data-type'		=> 'taxrates',
+					'linked'		=> 'qbo[taxes]',
+					'class'			=> 'button refresh taxrates',
+					'autoload'      => false
+				),
+				array(
+						'title'             => __( 'Exempt Sales Tax Code Mapping', 'cartpipe' ),
+						'desc'              => __( 'Please map the QuickBooks Sales Tax Code to use when tax wasn\'t collected, i.e. for foreign orders.', 'cartpipe' ),
+						'id'                => 'qbo[zero_tax_code]',
+						'type'              => 'select',
+						'options'			=> $this->tax_codes,//wc_get_order_statuses(),
+						'css'               => '',
+						'default'           => '',
+						'autoload'          => false
+				),
+						array(
+						'title'			=> __( '', 'cartpipe' ),
+						'desc'          => __( 'Refresh Tax Codes?', 'cartpipe' ),
+						'label'         => __( 'Refresh', 'cartpipe' ),
+						//'id'            => 'qbo[sync_stock]',
+						'type'          => 'button',
+						'url'			=> '#',
+						'data-type'		=> 'taxcodes',
+						'linked'		=> 'qbo[zero_tax_code]',
+						'class'			=> 'button refresh taxcodes',
+						'autoload'      => false
+				),
+				array(
+					'title'             => __( 'Tax Code Mappings', 'cartpipe' ),
+					'desc'              => __( 'Please map your website tax classes to the corresponding tax code in QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[tax_codes]',
+					'type'              => 'mapping',
+					'options'			=> $this->tax_codes,//wc_get_order_statuses(),
+					'labels'			=> self::get_tax_classes(),
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
+					array(
+					'title'			=> __( '', 'cartpipe' ),
+					'desc'          => __( 'Refresh Tax Codes?', 'cartpipe' ),
+					'label'         => __( 'Refresh', 'cartpipe' ),
+					//'id'            => 'qbo[sync_stock]',
+					'type'          => 'button',
+					'url'			=> '#',
+					'data-type'		=> 'taxcodes',
+					'linked'		=> 'qbo[tax_codes]',
+					'class'			=> 'button refresh taxcodes',
+					'autoload'      => false
+				),
+				array(
+						'title'             => __( 'In-Country Shipping Item Tax Code Mapping', 'cartpipe' ),
+						'desc'              => __( 'Please map your shipping item tax code to the corresponding tax code in QuickBooks Online.', 'cartpipe' ),
+						'id'                => 'qbo[shipping_item_taxcode]',
+						'type'              => 'select',
+						'options'			=> $this->tax_codes,//wc_get_order_statuses(),
+						'css'               => '',
+						'default'           => '',
+						'autoload'          => false
+				),
+						array(
+						'title'			=> __( '', 'cartpipe' ),
+						'desc'          => __( 'Refresh Shipping Item Tax Codes?', 'cartpipe' ),
+						'label'         => __( 'Refresh', 'cartpipe' ),
+						//'id'            => 'qbo[sync_stock]',
+						'type'          => 'button',
+						'url'			=> '#',
+						'data-type'		=> 'taxcodes',
+						'linked'		=> 'qbo[shipping_item_taxcode]',
+						'class'			=> 'button refresh taxcodes',
+						'autoload'      => false
+				),
+				array(
+						'title'             => __( 'Foreign Country Shipping Item Tax Code Mapping', 'cartpipe' ),
+						'desc'              => __( 'Please map your shipping item tax code to the corresponding tax code in QuickBooks Online.', 'cartpipe' ),
+						'id'                => 'qbo[foreign_shipping_item_taxcode]',
+						'type'              => 'select',
+						'options'			=> $this->tax_codes,//wc_get_order_statuses(),
+						'css'               => '',
+						'default'           => '',
+						'autoload'          => false
+				),
+						array(
+						'title'			=> __( '', 'cartpipe' ),
+						'desc'          => __( 'Refresh Shipping Item Tax Codes?', 'cartpipe' ),
+						'label'         => __( 'Refresh', 'cartpipe' ),
+						//'id'            => 'qbo[sync_stock]',
+						'type'          => 'button',
+						'url'			=> '#',
+						'data-type'		=> 'taxcodes',
+						'linked'		=> 'qbo[foreign_shipping_item_taxcode]',
+						'class'			=> 'button refresh taxcodes',
+						'autoload'      => false
+				),
+				array(
+					'title'             => __( 'Payment Method Mappings', 'cartpipe' ),
+					'desc'              => __( 'Please map your website payment methods to the corresponding payment methods in QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[payment_methods]',
+					'type'              => 'mapping',
+					'options'			=> $this->payment_methods,//wc_get_order_statuses(),
+					'labels'			=> self::get_payment_methods(),
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
+				array(
+					'title'			=> __( '', 'cartpipe' ),
+					'desc'          => __( 'Refresh Payment Methods?', 'cartpipe' ),
+					'label'          => __( 'Refresh', 'cartpipe' ),
+					//'id'            => 'qbo[sync_stock]',
+					'type'          => 'button',
+					'url'			=> '#',
+					'data-type'		=> 'payments',
+					'linked'		=> 'qbo[payment_methods]',
+					'class'			=> 'button refresh payments',
+					'autoload'      => false
+				),
+
+				
+				array( 'type' => 'sectionend', 'id' => 'qbo_orders'),
+				);
+				break;
+		}
+		return $return;	
 	}
 }
 

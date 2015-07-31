@@ -69,6 +69,11 @@ No. It only works with QuickBooks Online
 3. Order transfer settings
 
 == Changelog ==
+= 1.0.10 =
+* Support QuickBooks CA
+
+= 1.0.9 =
+* Formatting
 
 = 1.0.8 =
 * First release

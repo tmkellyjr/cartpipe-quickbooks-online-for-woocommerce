@@ -102,8 +102,7 @@
 			}
 			CP()->cp_insert_fallout('Order #'.$ref_id,$ref_id, $qbo->errors, 'create-sales-receipt', 'order');
 			update_post_meta( $ref_id , '_cp_errors', $qbo->errors);
-			update_post_meta( $ref_id , 'cp_last_request', $qbo->last_request);
-			wp_set_object_terms( $query->post->ID , 'failed', 'queue_status'. false );
+			wp_set_object_terms( $ref_id , 'failed', 'queue_status'. false );
 			wp_set_object_terms($ref_id , 'not-in-quickbooks', 'qb_status'. false );
 		}
 	}

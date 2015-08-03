@@ -26,9 +26,9 @@
 		'rewrite'            => array( 'slug' => 'queue' ),
 		'capability_type'    => 'post',
 		'capabilities' 		 => array(
-    		//'create_posts' => false, // Removes support for the "Add New" function
+    		'create_posts' => false, // Removes support for the "Add New" function
   		),
-  		//'map_meta_cap' 		 => false,
+  		'map_meta_cap' 		 => false,
 		'has_archive'        => true,
 		'hierarchical'       => false,
 		'menu_position'      => null,

@@ -31,7 +31,7 @@
 		//CP()->sod_qbo_send_order( $ref_id );
 	}else{
 		$errors = explode(':', $qbo->errors);
-		CP()->cp_insert_fallout($ref_id, json_encode($qbo), 'check-customer', 'order');
+		CP()->cp_insert_fallout('Order #'.$ref_id,$ref_id, $qbo->errors, 'check-customer', 'order');
 		update_post_meta( $ref_id , '_cp_errors', $qbo->errors);
 		wp_set_object_terms( $query->post->ID , 'failed', 'queue_status'. false );
 		

@@ -69,6 +69,9 @@ No. It only works with QuickBooks Online
 3. Order transfer settings
 
 == Changelog ==
+= 1.0.11 =
+* Extend QB CA support to Invoices
+
 = 1.0.10 =
 * Support QuickBooks CA
 

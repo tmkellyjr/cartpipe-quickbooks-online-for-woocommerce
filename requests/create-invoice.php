@@ -4,9 +4,16 @@
 	$items 					= $WC_Order->get_items();
 	$taxes 					= $WC_Order->get_taxes();
 	$shipping				= $WC_Order->get_shipping_methods(); 
+	$qbo_tax_codes 			= CP()->qbo->tax_codes;
 	$qbo_id 				= false;
 	
 	foreach($items as $key=>$value){
+		if($value['tax_class'] == ''){
+			$value['tax_class'] = 'standard';
+		}
+		if(sizeof($qbo_tax_codes) > 0){
+			$qbo_tax_code = $qbo_tax_codes[$value['tax_class']];
+		}
 		if(isset( $value['variation_id'] ) && absint($value['variation_id']) > 0 ){
 			$qbo_id = get_post_meta( $value['variation_id'], 'qbo_product_id', true );
 		}elseif(( $value['product_id'] ) ){
@@ -19,7 +26,8 @@
 			'tax_class'		=> $value['tax_class'],
 			'web_id'		=> isset($value['variation_id']) && ($value['variation_id'] > 0 ) ? $value['variation_id'] : $value['product_id'],
 			'subtotal' 		=> $value['line_total'],
-			'qbo_product_id'=> $qbo_id ? $qbo_id : ''
+			'qbo_product_id'=> $qbo_id ? $qbo_id : '',
+			'qbo_tax_code'	=> $qbo_tax_code
 		);
 		
 	};
@@ -48,6 +56,7 @@
 			'order_items' 			=> $new_items,
 			'order_total'			=> $WC_Order->get_total(),
 			'order_subtotal'		=> $WC_Order->get_subtotal(),
+			'zero_tax'				=> CP()->qbo->zero_tax_code,
 			'posting_type'			=> 'invoice'
 	);
 	
@@ -61,6 +70,8 @@
 			$data['shipping_method'] = $method['name'];
 		}
 		$data['shipping_amount'] = $shipping_amount;
+		$data['shipping_taxcode'] = CP()->qbo->shipping_item_taxcode;
+		$data['foreign_shipping_taxcode'] = CP()->qbo->foreign_shipping_item_taxcode;
 		
 	}
 	
@@ -95,10 +106,9 @@
 			}
 		}
 		CP()->cp_insert_fallout('Order #'.$ref_id, $ref_id, $qbo->errors, 'create-invoice', 'order');
-		
 		update_post_meta( $ref_id , '_cp_errors', $qbo->errors);
-		wp_set_object_terms( $query->post->ID , 'failed', 'queue_status'. false );
-		wp_set_object_terms($ref_id , 'not-in-quickbooks', 'qb_status'. false );
+		wp_set_object_terms( $ref_id , 'failed', 'queue_status'. false );
+		wp_set_object_terms( $ref_id , 'not-in-quickbooks', 'qb_status'. false );
 		//}
 	}
 	return $qbo;

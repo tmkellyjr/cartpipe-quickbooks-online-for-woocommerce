@@ -3,7 +3,7 @@
 Plugin URI: Cartpipe.com
 Description: Cartpipe Client for WooCommerce / QuickBooks Online Integration
 Author: Cartpipe.com
-Version: 1.0.11
+Version: 1.0.12
 Author URI: Cartpipe.com
 */
 
@@ -11,7 +11,7 @@ Author URI: Cartpipe.com
 if(!class_exists('CP_QBO_Client')){
 	define("CP_API", "https://api.cartpipe.com");
 	define("CP_URL", "https://www.cartpipe.com");
-	
+	define("CP_VERSION", '1.0.12');
 	Class CP_QBO_Client{
 		/*
 		 * Instance
@@ -248,7 +248,13 @@ if(!class_exists('CP_QBO_Client')){
 			include_once(plugin_dir_path( __FILE__ ).'includes/cp-ajax.php');
 			include_once(plugin_dir_path( __FILE__ ).'includes/cp-heartbeat.php');
 			include_once(plugin_dir_path( __FILE__ ).'includes/cp-api-client.php');
-			
+			if ( ! empty( $_GET['page'] ) ) {
+				switch ( $_GET['page'] ) {
+					case 'cp-setup' :
+						include_once( plugin_dir_path( __FILE__ ).'/includes/cp-setup-wizard.php');
+						break;
+				}
+			};
 			
 			
 		}
@@ -326,6 +332,7 @@ if(!class_exists('CP_QBO_Client')){
 			include(plugin_dir_path( __FILE__ ).'cartpipe-post-types.php');
 		}
 		function menu_items(){
+			$settings_page 	= add_submenu_page( 'cartpipe', __( 'Cartpipe Install Wizard', 'cartpipe' ),  __( 'Setup Wizard', 'cartpipe' ) , 'administrator', 'index.php?page=cp-setup'  );
 			$main_page = add_menu_page( __( 'Cartpipe', 'cartpipe' ), __( 'Cartpipe', 'cartpipe' ), 'manage_woocommerce', 'cartpipe', null, null, '50' );
 		}
 		function settings_menu(){

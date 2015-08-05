@@ -190,6 +190,10 @@ class QBO_Admin_Settings {
 	 * @param array $options Opens array to output
 	 */
 	public static function output_fields( $options ) {
+		$wizard = false;
+		if ( !empty( $_GET['page'] ) && 'cp-setup' == $_GET['page'] ) {
+			$wizard = true;
+		}
 		foreach ( $options as $value ) {
 			if ( ! isset( $value['type'] ) ) {
 				continue;
@@ -295,7 +299,7 @@ class QBO_Admin_Settings {
 				case 'text':
 				case 'email':
 				case 'number':
-				
+					
 					$type         	= $value['type'];
 					$class        	= '';
 					$option_value 	= self::get_option( $value['id'], $value['default'] );
@@ -307,16 +311,36 @@ class QBO_Admin_Settings {
 							<?php echo $tip; ?>
 						</th>
 						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<input
-								name="<?php echo esc_attr( $value['id'] ); ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								type="<?php echo esc_attr( $type ); ?>"
-								style="<?php echo esc_attr( $value['css'] ); ?>"
-								value="<?php echo esc_attr( $option_value ); ?>"
-								class="<?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo esc_attr( $disabled );?>
-								<?php echo implode( ' ', $custom_attributes ); ?>
-								/> <?php echo $description; ?>
+							<?php switch ($wizard) {
+								case true:?>
+									<?php echo $description; ?>
+									<input
+									name="<?php echo esc_attr( $value['id'] ); ?>"
+									id="<?php echo esc_attr( $value['id'] ); ?>"
+									type="<?php echo esc_attr( $type ); ?>"
+									style="<?php echo esc_attr( $value['css'] ); ?>"
+									value="<?php echo esc_attr( $option_value ); ?>"
+									class="<?php echo esc_attr( $value['class'] ); ?>"
+									<?php echo esc_attr( $disabled );?>
+									<?php echo implode( ' ', $custom_attributes ); ?>
+									/> 
+									<?php break;
+								
+								default: ?>
+									<input
+									name="<?php echo esc_attr( $value['id'] ); ?>"
+									id="<?php echo esc_attr( $value['id'] ); ?>"
+									type="<?php echo esc_attr( $type ); ?>"
+									style="<?php echo esc_attr( $value['css'] ); ?>"
+									value="<?php echo esc_attr( $option_value ); ?>"
+									class="<?php echo esc_attr( $value['class'] ); ?>"
+									<?php echo esc_attr( $disabled );?>
+									<?php echo implode( ' ', $custom_attributes ); ?>
+									/> <?php echo $description; ?>
+									
+									<?php break;
+							}?>
+							
 						</td>
 					</tr><?php
 					break;
@@ -390,7 +414,63 @@ class QBO_Admin_Settings {
 							<?php echo $tip; ?>
 						</th>
 						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<table>
+							<?php switch ($wizard) {
+								
+								case true:?>
+								  <?php echo $description; ?>
+									<table>
+								<?php 
+								
+								if($value['labels'] ) {
+									foreach($value['labels'] as $label_key => $label){
+									
+									?>
+								<tr>
+									<td><label><?php printf('%s', $label);?></label></td>
+									<td>
+										<?php _e('<span class="arrow"> &#8658;</span> ', 'cartpipe');?>							
+										<select
+											name="<?php echo esc_attr( $value['id'] . '['. $label_key . ']' ); ?>"
+											id="<?php echo esc_attr( $value['id']. '['. $label_key . ']' ); ?>"
+											style="<?php echo esc_attr( $value['css'] ); ?>"
+											class="<?php echo esc_attr( $value['class'] ); ?>"
+											<?php echo implode( ' ', $custom_attributes ); ?>
+											>
+											<option value=""><?php _e('Please select an option');?></option>
+											<?php
+												
+												if($value['options']){
+													foreach ( $value['options'] as $key => $val ) {
+														
+														?>
+														<option value="<?php echo esc_attr( $key ); ?>" <?php
+				
+															if ( is_array( $option_value ) ) {
+																selected( $option_value[$label_key], $key );
+															} else {
+																selected( $option_value, $key );
+															}
+				
+														?>><?php 
+														
+														echo $val; ?></option>
+														<?php
+													}
+												}
+											?>
+									   </select>
+									</td> 
+						   		</tr>
+						   		<?php }
+						   		} elseif(!$value['labels'] && $value['auto_create']){
+														
+								}?>
+						   </table>
+						 
+									<?php break;
+								
+								default:?>
+									<table>
 								<?php 
 								
 								if($value['labels'] ) {
@@ -438,6 +518,9 @@ class QBO_Admin_Settings {
 								}?>
 						   </table>
 						   <?php echo $description; ?>
+									<?php break;
+							}?>
+							
 						</td>
 					</tr><?php
 					break;
@@ -453,31 +536,65 @@ class QBO_Admin_Settings {
 							<?php echo $tip; ?>
 						</th>
 						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<select
-								name="<?php echo esc_attr( $value['id'] ); ?><?php if ( $value['type'] == 'multiselect' ) echo '[]'; ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								style="<?php echo esc_attr( $value['css'] ); ?>"
-								class="<?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
-								<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
-								>
-								<option value=""><?php _e('Please select an option');?></option>
-								<?php
-									foreach ( $value['options'] as $key => $val ) {
-										?>
-										<option value="<?php echo esc_attr( $key ); ?>" <?php
-
-											if ( is_array( $option_value ) ) {
-												selected( in_array( $key, $option_value ), true );
-											} else {
-												selected( $option_value, $key );
-											}
-
-										?>><?php echo $val ?></option>
+							<?php switch ($wizard) {
+								case true:?>
+								<?php echo $description; ?>
+									<select
+										name="<?php echo esc_attr( $value['id'] ); ?><?php if ( $value['type'] == 'multiselect' ) echo '[]'; ?>"
+										id="<?php echo esc_attr( $value['id'] ); ?>"
+										style="<?php echo esc_attr( $value['css'] ); ?>"
+										class="<?php echo esc_attr( $value['class'] ); ?>"
+										<?php echo implode( ' ', $custom_attributes ); ?>
+										<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
+										>
+										<option value=""><?php _e('Please select an option');?></option>
 										<?php
-									}
-								?>
-						   </select> <?php echo $description; ?>
+											foreach ( $value['options'] as $key => $val ) {
+												?>
+												<option value="<?php echo esc_attr( $key ); ?>" <?php
+		
+													if ( is_array( $option_value ) ) {
+														selected( in_array( $key, $option_value ), true );
+													} else {
+														selected( $option_value, $key );
+													}
+		
+												?>><?php echo $val ?></option>
+												<?php
+											}
+										?>
+								   </select> 
+									<?php break;
+								
+								default:?>
+									<select
+										name="<?php echo esc_attr( $value['id'] ); ?><?php if ( $value['type'] == 'multiselect' ) echo '[]'; ?>"
+										id="<?php echo esc_attr( $value['id'] ); ?>"
+										style="<?php echo esc_attr( $value['css'] ); ?>"
+										class="<?php echo esc_attr( $value['class'] ); ?>"
+										<?php echo implode( ' ', $custom_attributes ); ?>
+										<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
+										>
+										<option value=""><?php _e('Please select an option');?></option>
+										<?php
+											foreach ( $value['options'] as $key => $val ) {
+												?>
+												<option value="<?php echo esc_attr( $key ); ?>" <?php
+		
+													if ( is_array( $option_value ) ) {
+														selected( in_array( $key, $option_value ), true );
+													} else {
+														selected( $option_value, $key );
+													}
+		
+												?>><?php echo $val ?></option>
+												<?php
+											}
+										?>
+								   </select> <?php echo $description; ?>
+									<?php break;
+							}?>
+							
 						</td>
 					</tr><?php
 					break;
@@ -562,8 +679,24 @@ class QBO_Admin_Settings {
 						<?php
 					}
 
-					?>
-						<label for="<?php echo $value['id'] ?>">
+					?><?php 
+					switch ($wizard) {
+						case true:?>
+							<?php printf('<span class="description">%s</span>', $description); ?>
+							<label for="<?php echo $value['id'] ?>">
+								<input
+									name="<?php echo esc_attr( $value['id'] ); ?>"
+									id="<?php echo esc_attr( $value['id'] ); ?>"
+									type="checkbox"
+									value="1"
+									<?php checked( $option_value, 'yes'); ?>
+									<?php echo implode( ' ', $custom_attributes ); ?>
+								/> 
+							</label>
+							<?php break;
+						
+						default:?>
+							<label for="<?php echo $value['id'] ?>">
 							<input
 								name="<?php echo esc_attr( $value['id'] ); ?>"
 								id="<?php echo esc_attr( $value['id'] ); ?>"
@@ -572,7 +705,10 @@ class QBO_Admin_Settings {
 								<?php checked( $option_value, 'yes'); ?>
 								<?php echo implode( ' ', $custom_attributes ); ?>
 							/> <?php echo $description ?>
-						</label> <?php echo $tip; ?>
+						</label> <?php echo $tip; ?>	
+							<?php break;
+					}?>
+						
 					<?php
 
 					if ( ! isset( $value['checkboxgroup'] ) || 'end' == $value['checkboxgroup'] ) {
@@ -667,10 +803,11 @@ class QBO_Admin_Settings {
 	 * @return bool
 	 */
 	public static function save_fields( $options ) {
+		
 		if ( empty( $_POST ) ) {
 			return false;
 		}
-
+		
 		// Options to update will be stored here
 		$update_options = array();
 		

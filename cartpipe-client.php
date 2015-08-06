@@ -3,7 +3,7 @@
 Plugin URI: Cartpipe.com
 Description: Cartpipe Client for WooCommerce / QuickBooks Online Integration
 Author: Cartpipe.com
-Version: 1.0.12
+Version: 1.0.13
 Author URI: Cartpipe.com
 */
 
@@ -326,7 +326,19 @@ if(!class_exists('CP_QBO_Client')){
 		
 		
 		
-		
+		function init_client(){
+			include_once(plugin_dir_path( __FILE__ ).'includes/cp-api-client.php');
+			if(isset($this->qbo->consumer_key)){
+				$this->cp_consumer_key 		= $this->qbo->consumer_key; 	
+			}
+			if(isset($this->qbo->consumer_secret)){
+				$this->cp_consumer_secret 	= $this->qbo->consumer_secret; 	
+			}
+			if( CP_API && $this->cp_consumer_key && $this->cp_consumer_secret ){
+				$this->client 				= new CP_Client( $this->cp_consumer_key, $this->cp_consumer_secret, CP_API );
+			}
+			
+		}
 		function qbo_init() {
 			
 			include(plugin_dir_path( __FILE__ ).'cartpipe-post-types.php');

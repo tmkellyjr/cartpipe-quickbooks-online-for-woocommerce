@@ -78,7 +78,7 @@
 	$qbo 			= CP()->client->qbo_add_order( $ref_id, cpencode( $data ), CP()->qbo->license );
 	
 	$qbo->post_id 	= $query->post->ID;
-	if(isset($qbo->data)){
+	if(isset($qbo->data) && !($qbo->errors)){
 		$qbo->has_transferred = true;
 		$data 				= (array) maybe_unserialize( get_post_meta( $ref_id, '_quickbooks_data', true) );
 		$data['invoice'] 	= $qbo;

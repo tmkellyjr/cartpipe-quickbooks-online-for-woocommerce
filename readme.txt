@@ -67,13 +67,11 @@ No. It only works with QuickBooks Online
 1. Cartpipe settings
 2. Product sync settings 
 3. Order transfer settings
-4. Setup Wizard Step 1
-5. Setup Wizard Step 2
-6. Setup Wizard Step 3
-7. Setup Wizard Step 4
-8. Setup Wizard Step 5
 
 == Changelog ==
+= 1.0.13 =
+* Instantiate API Client in the wizard
+
 = 1.0.12 =
 * Include Setup Wizard
 

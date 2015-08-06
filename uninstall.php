@@ -12,5 +12,5 @@ if($options['delete_uninstall'] == 'yes'){
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '_cp_%';" );
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '_quickbooks_%';" );
 	$wpdb->query( "DELETE FROM {$wpdb->posts} WHERE post_type IN ( 'cp_queue', 'cp_fallout' );" );
-	$wpdb->query( "DELETE FROM {$wpdb->postmeta} meta LEFT JOIN {$wpdb->posts} posts ON posts.ID = meta.post_id WHERE posts.ID IS NULL;" );
+	$wpdb->query( "DELETE meta FROM {$wpdb->postmeta} meta LEFT JOIN {$wpdb->posts} posts ON posts.ID = meta.post_id WHERE posts.ID IS NULL;" );
 }

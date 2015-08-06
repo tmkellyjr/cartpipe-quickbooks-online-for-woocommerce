@@ -52,6 +52,7 @@
 		 * @param boolean $is_ssl          If the URL is secure or not, optional
 		 */
 		public function __construct( $consumer_key, $consumer_secret, $store_url, $is_ssl = false ) {
+			
 			if ( ! empty( $consumer_key ) && ! empty( $consumer_secret ) && ! empty( $store_url ) ) {
 				$this->_api_url = (  rtrim($store_url,'/' ) . '/' ) . self::API_ENDPOINT;
 				$this->set_consumer_key( $consumer_key );

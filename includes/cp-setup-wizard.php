@@ -212,7 +212,9 @@ class CP_Setup_Wizard {
 		exit;
 	}
 	public function get_settings( $step ){
-		
+		if(!CP()->client){
+			CP()->init_client();
+		}
 		switch ($step) {
 			case 'credentials':
 				$this->settings = array(

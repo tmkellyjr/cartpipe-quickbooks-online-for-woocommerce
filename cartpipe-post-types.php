@@ -1,19 +1,19 @@
 <?php 
 	$labels = array(
-		'name'               => _x( 'Queue', 'post type general name', 'sod-qbo-queue' ),
-		'singular_name'      => _x( 'Queue Item', 'post type singular name', 'sod-qbo-queue' ),
-		'menu_name'          => _x( 'Queue', 'admin menu', 'sod-qbo-queue' ),
-		'name_admin_bar'     => _x( 'Queue', 'add new on admin bar', 'sod-qbo-queue' ),
-		'add_new'            => _x( 'Add New', 'quickbooks_queue', 'sod-qbo-queue' ),
-		'add_new_item'       => __( 'Add New Queue Item', 'sod-qbo-queue' ),
-		'new_item'           => __( 'New Queue Item', 'sod-qbo-queue' ),
-		'edit_item'          => __( 'Edit Queue Item', 'sod-qbo-queue' ),
-		'view_item'          => __( 'View Queue Item', 'sod-qbo-queue' ),
-		'all_items'          => __( 'All Queue Items', 'sod-qbo-queue' ),
-		'search_items'       => __( 'Search Queue Items', 'sod-qbo-queue' ),
-		'parent_item_colon'  => __( 'Parent Queue Item:', 'sod-qbo-queue' ),
-		'not_found'          => __( 'No queued items found.', 'sod-qbo-queue' ),
-		'not_found_in_trash' => __( 'No queued items found in Trash.', 'sod-qbo-queue' )
+		'name'               => _x( 'Queue',  'cartpipe' ),
+		'singular_name'      => _x( 'Queue Item',  'cartpipe' ),
+		'menu_name'          => _x( 'Queue',  'cartpipe' ),
+		'name_admin_bar'     => _x( 'Queue',  'cartpipe' ),
+		'add_new'            => _x( 'Add New',  'cartpipe' ),
+		'add_new_item'       => __( 'Add New Queue Item', 'cartpipe' ),
+		'new_item'           => __( 'New Queue Item', 'cartpipe' ),
+		'edit_item'          => __( 'Edit Queue Item', 'cartpipe' ),
+		'view_item'          => __( 'View Queue Item', 'cartpipe' ),
+		'all_items'          => __( 'Queue', 'cartpipe' ),
+		'search_items'       => __( 'Search Queue Items', 'cartpipe' ),
+		'parent_item_colon'  => __( 'Parent Queue Item:', 'cartpipe' ),
+		'not_found'          => __( 'No queued items found.', 'cartpipe' ),
+		'not_found_in_trash' => __( 'No queued items found in Trash.', 'cartpipe' )
 	);
 
 	$args = array(
@@ -25,10 +25,10 @@
 		'query_var'          => true,
 		'rewrite'            => array( 'slug' => 'queue' ),
 		'capability_type'    => 'post',
-		'capabilities' 		 => array(
-    		'create_posts' => false, // Removes support for the "Add New" function
-  		),
-  		'map_meta_cap' 		 => false,
+		// 'capabilities' 		 => array(
+    		// 'create_posts' => false, // Removes support for the "Add New" function
+  		// ),
+  		// 'map_meta_cap' 		 => false,
 		'has_archive'        => true,
 		'hierarchical'       => false,
 		'menu_position'      => null,
@@ -37,17 +37,17 @@
 
 	register_post_type( 'cp_queue', $args );
 	$labels = array(
-		'name'              => _x( 'Status', 'taxonomy general name' ),
-		'singular_name'     => _x( 'Status', 'taxonomy singular name' ),
-		'search_items'      => __( 'Search Statuses' ),
-		'all_items'         => __( 'All Statuses' ),
-		'parent_item'       => __( 'Parent Status' ),
-		'parent_item_colon' => __( 'Parent Status:' ),
-		'edit_item'         => __( 'Edit Status' ),
-		'update_item'       => __( 'Update Status' ),
-		'add_new_item'      => __( 'Add New Status' ),
-		'new_item_name'     => __( 'New Status' ),
-		'menu_name'         => __( 'Status' ),
+		'name'              => _x( 'Status', 'cartpipe'  ),
+		'singular_name'     => _x( 'Status', 'cartpipe' ),
+		'search_items'      => __( 'Search Statuses', 'cartpipe' ),
+		'all_items'         => __( 'All Statuses', 'cartpipe' ),
+		'parent_item'       => __( 'Parent Status', 'cartpipe' ),
+		'parent_item_colon' => __( 'Parent Status:', 'cartpipe' ),
+		'edit_item'         => __( 'Edit Status', 'cartpipe' ),
+		'update_item'       => __( 'Update Status', 'cartpipe' ),
+		'add_new_item'      => __( 'Add New Status', 'cartpipe' ),
+		'new_item_name'     => __( 'New Status', 'cartpipe' ),
+		'menu_name'         => __( 'Status', 'cartpipe' ),
 	);
 
 	$args = array(
@@ -62,17 +62,17 @@
 	register_taxonomy( 'queue_status', array( 'cp_queue' ), $args );
 	
 	$labels = array(
-		'name'              => _x( 'QuickBooks Status', 'taxonomy general name' ),
-		'singular_name'     => _x( 'QuickBooks Status', 'taxonomy singular name' ),
-		'search_items'      => __( 'Search QuickBooks Statuses' ),
-		'all_items'         => __( 'All QuickBooks Statuses' ),
-		'parent_item'       => __( 'Parent QuickBooks Status' ),
-		'parent_item_colon' => __( 'Parent QuickBooks Status:' ),
-		'edit_item'         => __( 'Edit QuickBooks Status' ),
-		'update_item'       => __( 'Update QuickBooks Status' ),
-		'add_new_item'      => __( 'Add New QuickBooks Status' ),
-		'new_item_name'     => __( 'New QuickBooks Status' ),
-		'menu_name'         => __( 'QuickBooks Status' ),
+		'name'              => _x( 'QuickBooks Status', 'cartpipe' ),
+		'singular_name'     => _x( 'QuickBooks Status', 'cartpipe' ),
+		'search_items'      => __( 'Search QuickBooks Statuses', 'cartpipe' ),
+		'all_items'         => __( 'All QuickBooks Statuses', 'cartpipe' ),
+		'parent_item'       => __( 'Parent QuickBooks Status', 'cartpipe' ),
+		'parent_item_colon' => __( 'Parent QuickBooks Status:', 'cartpipe' ),
+		'edit_item'         => __( 'Edit QuickBooks Status', 'cartpipe' ),
+		'update_item'       => __( 'Update QuickBooks Status', 'cartpipe' ),
+		'add_new_item'      => __( 'Add New QuickBooks Status', 'cartpipe' ),
+		'new_item_name'     => __( 'New QuickBooks Status', 'cartpipe' ),
+		'menu_name'         => __( 'QuickBooks Status', 'cartpipe' ),
 	);
 
 	$args = array(
@@ -86,17 +86,17 @@
 
 	register_taxonomy( 'qb_status', array( 'product', 'shop_order' ), $args );
 	$labels = array(
-		'name'              => _x( 'Action', 'taxonomy general name' ),
-		'singular_name'     => _x( 'Action', 'taxonomy singular name' ),
-		'search_items'      => __( 'Search Actions' ),
-		'all_items'         => __( 'All Actions' ),
-		'parent_item'       => __( 'Parent Action' ),
-		'parent_item_colon' => __( 'Parent Action:' ),
-		'edit_item'         => __( 'Edit Action' ),
-		'update_item'       => __( 'Update Action' ),
-		'add_new_item'      => __( 'Add New Action' ),
-		'new_item_name'     => __( 'New Action' ),
-		'menu_name'         => __( 'Action' ),
+		'name'              => _x( 'Action', 'cartpipe'),
+		'singular_name'     => _x( 'Action', 'cartpipe' ),
+		'search_items'      => __( 'Search Actions', 'cartpipe' ),
+		'all_items'         => __( 'All Actions', 'cartpipe' ),
+		'parent_item'       => __( 'Parent Action' , 'cartpipe'),
+		'parent_item_colon' => __( 'Parent Action:' , 'cartpipe'),
+		'edit_item'         => __( 'Edit Action' , 'cartpipe'),
+		'update_item'       => __( 'Update Action' , 'cartpipe'),
+		'add_new_item'      => __( 'Add New Action' , 'cartpipe'),
+		'new_item_name'     => __( 'New Action', 'cartpipe' ),
+		'menu_name'         => __( 'Action', 'cartpipe' ),
 	);
 
 	$args = array(
@@ -116,8 +116,9 @@
 				'create invoice', 
 				'create sales receipt', 
 				'create payment',
+				'create creditmemo',
 				'import inventory',
-				'check-customer'
+				'check customer'
 			),
 			'queue_status'=> array(
 				'in process',
@@ -138,16 +139,16 @@
 		}
 	}
 	$labels = array(
-		'name'               => _x( 'Fallout', 'post type general name', 'cartpipe' ),
-		'singular_name'      => _x( 'Fallout Item', 'post type singular name', 'cartpipe' ),
-		'menu_name'          => _x( 'Fallout', 'admin menu', 'cartpipe' ),
-		'name_admin_bar'     => _x( 'Fallout', 'add new on admin bar', 'cartpipe' ),
-		'add_new'            => _x( 'Add New', 'quickbooks_queue', 'cartpipe' ),
+		'name'               => _x( 'Fallout',  'cartpipe' ),
+		'singular_name'      => _x( 'Fallout Item',  'cartpipe' ),
+		'menu_name'          => _x( 'Fallout',  'cartpipe' ),
+		'name_admin_bar'     => _x( 'Fallout',  'cartpipe' ),
+		'add_new'            => _x( 'Add New',  'cartpipe' ),
 		'add_new_item'       => __( 'Add New Fallout Item', 'cartpipe' ),
 		'new_item'           => __( 'New Fallout Item', 'cartpipe' ),
 		'edit_item'          => __( 'Edit Fallout Item', 'cartpipe' ),
 		'view_item'          => __( 'View Fallout Item', 'cartpipe' ),
-		'all_items'          => __( 'All Fallout Items', 'cartpipe' ),
+		'all_items'          => __( 'Fallout', 'cartpipe' ),
 		'search_items'       => __( 'Search Fallout Items', 'cartpipe' ),
 		'parent_item_colon'  => __( 'Parent Fallout Item:', 'cartpipe' ),
 		'not_found'          => __( 'No fallout items found.', 'cartpipe' ),
@@ -175,17 +176,17 @@
 
 	register_post_type( 'cp_fallout', $args );
 	$labels = array(
-		'name'              => _x( 'Error Code', 'taxonomy general name' ),
-		'singular_name'     => _x( 'Error Code', 'taxonomy singular name' ),
-		'search_items'      => __( 'Search Error Codes' ),
-		'all_items'         => __( 'All Error Codes' ),
-		'parent_item'       => __( 'Parent Error Code' ),
-		'parent_item_colon' => __( 'Parent Error Code:' ),
-		'edit_item'         => __( 'Edit Error Code' ),
-		'update_item'       => __( 'Update Error Code' ),
-		'add_new_item'      => __( 'Add New Error Code' ),
-		'new_item_name'     => __( 'New Error Code' ),
-		'menu_name'         => __( 'Error Code' ),
+		'name'              => _x( 'Error Code', 'cartpipe' ),
+		'singular_name'     => _x( 'Error Code', 'cartpipe' ),
+		'search_items'      => __( 'Search Error Codes', 'cartpipe' ),
+		'all_items'         => __( 'All Error Codes', 'cartpipe' ),
+		'parent_item'       => __( 'Parent Error Code', 'cartpipe' ),
+		'parent_item_colon' => __( 'Parent Error Code:', 'cartpipe' ),
+		'edit_item'         => __( 'Edit Error Code', 'cartpipe' ),
+		'update_item'       => __( 'Update Error Code', 'cartpipe' ),
+		'add_new_item'      => __( 'Add New Error Code', 'cartpipe' ),
+		'new_item_name'     => __( 'New Error Code', 'cartpipe' ),
+		'menu_name'         => __( 'Error Code', 'cartpipe' ),
 	);
 
 	$args = array(

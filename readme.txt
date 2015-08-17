@@ -4,7 +4,7 @@ Donate Link:
 Tags: woocommerce, quickbooks, xero, freshbooks, accounting, ecommerce, integrations
 Requires at least: 3.0.1
 Tested up to: 4.2
-Stable tag: 1.0.8
+Stable tag: 1.0.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,9 @@ No. It only works with QuickBooks Online
 3. Order transfer settings
 
 == Changelog ==
+= 1.0.14 =
+* Include support for refunds in WooCommerce 
+
 = 1.0.13 =
 * Instantiate API Client in the wizard
 

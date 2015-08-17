@@ -3,7 +3,7 @@
 Plugin URI: Cartpipe.com
 Description: Cartpipe Client for WooCommerce / QuickBooks Online Integration
 Author: Cartpipe.com
-Version: 1.0.13
+Version: 1.0.14
 Author URI: Cartpipe.com
 */
 
@@ -11,7 +11,7 @@ Author URI: Cartpipe.com
 if(!class_exists('CP_QBO_Client')){
 	define("CP_API", "https://api.cartpipe.com");
 	define("CP_URL", "https://www.cartpipe.com");
-	define("CP_VERSION", '1.0.12');
+	define("CP_VERSION", '1.0.14');
 	Class CP_QBO_Client{
 		/*
 		 * Instance
@@ -82,6 +82,7 @@ if(!class_exists('CP_QBO_Client')){
 			$this->init();
 			add_action( 'woocommerce_api_edit_customer', array( $this, 'cp_qbo_update_customer_info'), 10, 2);
 			add_action('init', array( $this,'qbo_init'));
+			//add_action( 'admin_init', array($this, 'debug'));
 			add_action('admin_menu', array($this,'menu_items'));
 			add_action( 'admin_menu', array( $this, 'settings_menu' ), 10 );
 			add_action( 'add_meta_boxes', array($this, 'cp_add_meta_boxes') );
@@ -98,6 +99,11 @@ if(!class_exists('CP_QBO_Client')){
 			add_action( 'woocommerce_order_status_completed', array( $this, 'cp_qbo_conditional_send_payment') , 13 );
 			add_action( 'admin_enqueue_scripts', array( &$this,'cp_load_admin_js' )) ;
 			add_filter( 'woocommerce_admin_order_actions', array(&$this, 'cp_add_qb_transfer'), 10, 2 );
+			add_action( 'woocommerce_refund_created', array($this, 'cp_add_refund'));
+		}
+		function debug(){
+			$order = wc_get_order(888);
+			var_dump( $order->get_shipping_methods() );
 		}
 		function cp_add_qbo_tax_id( $items, $order_abstract){
 			if($items){
@@ -518,7 +524,7 @@ if(!class_exists('CP_QBO_Client')){
 		}
 		function cp_qbo_check_customer_exists( $order_id, $posted ){
 			$post = array(
-			  'post_title'    	=> 'Order #'. $order_id . ' - check customer',
+			  'post_title'    	=> 'Order #'. $order_id . ' &#8658; check customer',
 			  'post_content'  	=> '',
 			  'post_status'   	=> 'publish',
 			  'post_type'		=> 'cp_queue'
@@ -532,13 +538,13 @@ if(!class_exists('CP_QBO_Client')){
 				update_post_meta( $post_id, 'reference_post_id', $order_id );
 			}
 		}
-		function sod_qbo_send_order( $order_id, $force = false ){
-			$data = maybe_unserialize( get_post_meta( $order_id, '_quickbooks_data', true ) );
-			//Hasn't been sent
+		function cp_add_refund( $refund_id ){
+			
+			$data = maybe_unserialize( get_post_meta( $refund_id, '_quickbooks_data', true ) );
 			if(CP()->qbo->license_info->level != 'Basic'){
 				if( !$data || ($data && $force) ){
 					$post = array(
-					  'post_title'    	=> 'Order #'. $order_id . ' - ' . str_replace( '-', '', $this->qbo->order_type ),
+					  'post_title'    	=> 'Refund #'. $refund_id . '  &#8658;  Create Refund in QuickBooks',
 					  'post_content'  	=> '',
 					  'post_status'   	=> 'publish',
 					  'post_type'		=> 'cp_queue'
@@ -547,9 +553,37 @@ if(!class_exists('CP_QBO_Client')){
 					// Insert the post into the database
 					$post_id = wp_insert_post( $post );
 					if( $post_id ){
+						wp_set_object_terms( $post_id , 'create-refund', 'queue_action' );
+						wp_set_object_terms( $post_id , 'queued', 'queue_status' );
+						update_post_meta( $post_id, 'reference_post_id', $refund_id );
+					}
+				}else{
+					CPM()->add_message( 'Refund #' . $refund_id . ' has already been sent.');
+				}
+			}
+			return $post_id;
+		} 
+		function sod_qbo_send_order( $order_id, $force = false ){
+			$data = maybe_unserialize( get_post_meta( $order_id, '_quickbooks_data', true ) );
+			$queued		= get_post_meta( $order_id,'_cp_is_queued', true);
+			//Hasn't been sent
+			if(CP()->qbo->license_info->level != 'Basic'){
+				if( ( !$data || ($data && $force) ) && !$queued){
+					$post = array(
+					  'post_title'    	=> 'Order #'. $order_id . ' &#8658; ' . str_replace( '-', '', $this->qbo->order_type ),
+					  'post_content'  	=> '',
+					  'post_status'   	=> 'publish',
+					  'post_type'		=> 'cp_queue'
+					);
+		
+					// Insert the post into the database
+					$post_id = wp_insert_post( $post );
+							
+					if( $post_id ){
 						wp_set_object_terms( $post_id , 'create-'.$this->qbo->order_type, 'queue_action' );
 						wp_set_object_terms( $post_id , 'queued', 'queue_status' );
 						update_post_meta( $post_id, 'reference_post_id', $order_id );
+						update_post_meta( $order_id,'_cp_is_queued', 'yes');
 					}
 				}else{
 					CPM()->add_message( 'Order #' . $order_id . ' has already been sent. Please try manually resending if you\'d like to recreate the order in QuickBooks.');
@@ -560,12 +594,13 @@ if(!class_exists('CP_QBO_Client')){
 	function cp_qbo_conditional_send_payment( $order_id ){
 		$data 		= get_post_meta( $order_id, '_qbo_payment_number', true);
 		$invoice	= get_post_meta( $order_id, '_qbo_invoice_number', true);
+		$queued		= get_post_meta( $order_id,'_cp_is_queued', true);
 		if( !$data ){
 			if(CP()->qbo->license_info->level != 'Basic'){
 				if($this->qbo->order_type == 'invoice' && $this->qbo->create_payment == 'yes'){
-					if(!isset($invoice) || $invoice == ''){
+					if((!isset($invoice) || $invoice == '' ) && !$queued ){
 						$post = array(
-						  'post_title'    	=> 'Order #'. $order_id . ' - Invoice',
+						  'post_title'    	=> 'Order #'. $order_id . ' &#8658; Invoice',
 						  'post_content'  	=> '',
 						  'post_status'   	=> 'publish',
 						  'post_type'		=> 'cp_queue'
@@ -578,9 +613,10 @@ if(!class_exists('CP_QBO_Client')){
 							wp_set_object_terms( $post_id , 'queued', 'queue_status' );
 							update_post_meta( $post_id, 'reference_post_id', $order_id );
 						}
+						update_post_meta( $order_id, '_cp_is_queued', 'yes');
 					}
 					$post = array(
-					  'post_title'    	=> 'Order #'. $order_id . ' - Receive Payment On Account',
+					  'post_title'    	=> 'Order #'. $order_id . ' &#8658; Receive Payment On Account',
 					  'post_content'  	=> '',
 					  'post_status'   	=> 'publish',
 					  'post_type'		=> 'cp_queue'

@@ -228,6 +228,7 @@ class CP_AJAX {
 		
 			wp_safe_redirect( wp_get_referer() ? wp_get_referer() : admin_url( 'edit.php?post_type=shop_order' ) );
 		endif;
+		die();
 	}
 	public static function cp_sync_start(){
 		check_ajax_referer( 'cp-options-nonce', 'security' );

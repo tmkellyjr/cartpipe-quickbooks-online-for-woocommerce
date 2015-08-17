@@ -118,8 +118,8 @@ jQuery( function ( $ ) {
 				};
 				$.post( cp_order_meta_box.ajax_url, data, function( response ) {
 					console.log(response); 
-					parent.toggleClass("queued");
-					window.location.reload();
+					//parent.toggleClass("queued");
+					//window.location.reload();
 				});
 			}
 		}else{

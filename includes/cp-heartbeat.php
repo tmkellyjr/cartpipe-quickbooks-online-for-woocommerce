@@ -94,6 +94,7 @@
 									
 								$params['cp'] = $this;
 								$params 	= get_defined_vars();
+								
 								switch ($act) {
 									case 'sync-item':
 										$response['sync-item'] 				= cartpipe_request('sync', 'item', $params); 

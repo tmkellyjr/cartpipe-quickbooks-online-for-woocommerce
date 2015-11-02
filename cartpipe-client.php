@@ -3,7 +3,7 @@
 Plugin URI: Cartpipe.com
 Description: Cartpipe Client for WooCommerce / QuickBooks Online Integration
 Author: Cartpipe.com
-Version: 1.0.14
+Version: 1.0.15
 Author URI: Cartpipe.com
 */
 
@@ -11,7 +11,7 @@ Author URI: Cartpipe.com
 if(!class_exists('CP_QBO_Client')){
 	define("CP_API", "https://api.cartpipe.com");
 	define("CP_URL", "https://www.cartpipe.com");
-	define("CP_VERSION", '1.0.14');
+	define("CP_VERSION", '1.0.15');
 	Class CP_QBO_Client{
 		/*
 		 * Instance
@@ -249,6 +249,7 @@ if(!class_exists('CP_QBO_Client')){
 		function includes(){
 			include_once(plugin_dir_path( __FILE__ ).'cartpipe-functions.php');
 			include_once(plugin_dir_path( __FILE__ ).'cartpipe-help.php');
+			//include(plugin_dir_path( __FILE__ ).'/test-scripts.php');
 			include_once(plugin_dir_path( __FILE__ ). 'includes/admin-settings.php' );
 			include_once(plugin_dir_path( __FILE__ ).'includes/cp-messages.php');
 			include_once(plugin_dir_path( __FILE__ ).'includes/cp-ajax.php');
@@ -318,7 +319,6 @@ if(!class_exists('CP_QBO_Client')){
 				$notices 					= get_transient( 'cartpipe_notices' );
 				if ( false === $license ) {
 					$license = $this->client->check_service( $this->qbo->license, get_home_url());
-					
 					set_transient( 'cartpipe_license_status', $license, 43200 );
 					$this->qbo->license_info = $license;
 					
@@ -327,7 +327,7 @@ if(!class_exists('CP_QBO_Client')){
 				}
 				
 			} 
-		
+			
 		}	
 		
 		
@@ -361,40 +361,43 @@ if(!class_exists('CP_QBO_Client')){
 		}
 		function cp_qbo_import_item( $product ){
 			if(isset($product->name)){
-				$export_mappings = isset( CP()->qbo->import_fields ) ? CP()->qbo->import_fields : null;
-				if(isset($export_mappings)){
-					$new_product = array(
-						'post_title'   => wc_clean( $product->$export_mappings['name'] ),
-						'post_status'  => ( isset( $product->status ) ? wc_clean( $product->status ) : 'publish' ),
-						'post_type'    => 'product',
-						'post_excerpt' => ( isset(  $product->$export_mappings['description'] ) ? wc_clean( $product->$export_mappings['description']  ) : '' ),
-						'post_content' => ( isset(  $product->$export_mappings['description']) ? wc_clean( $product->$export_mappings['description']  ) : '' ),
-						'post_author'  => get_current_user_id(),
-					);
-					
-				}else{
-					$new_product = array(
-						'post_title'   => wc_clean( $product->name ),
-						'post_status'  => ( isset( $product->status ) ? wc_clean( $product->status ) : 'publish' ),
-						'post_type'    => 'product',
-						'post_excerpt' => ( isset( $product->description ) ? wc_clean( $product->description ) : '' ),
-						'post_content' => ( isset( $product->description ) ? wc_clean( $product->description ) : '' ),
-						'post_author'  => get_current_user_id(),
-					);
-				}
-		
-				// Attempts to create the new product
-				$id = wp_insert_post( $new_product, true );
-		
-				// Checks for an error in the product creation
-				if ( is_wp_error( $id ) ) {
-					return new WP_Error( 'cp_api_cannot_create_product', $id->get_error_message(), array( 'status' => 400 ) );
-				}
-				// Save product meta fields
-				$meta = $this->save_product_meta( $id, $product );
-				wc_delete_product_transients( $id );
-				if ( is_wp_error( $meta ) ) {
-					return $meta;
+				$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title='%s' LIMIT 1", $product->name	 ) );
+				if(!$product_id){
+					$export_mappings = isset( CP()->qbo->import_fields ) ? CP()->qbo->import_fields : null;
+					if(isset($export_mappings)){
+						$new_product = array(
+							'post_title'   => wc_clean( $product->$export_mappings['name'] ),
+							'post_status'  => ( isset( $product->status ) ? wc_clean( $product->status ) : 'publish' ),
+							'post_type'    => 'product',
+							'post_excerpt' => ( isset( $product->description ) ? wc_clean( $product->description ) : '' ),
+							'post_content' => ( isset( $product->description ) ? wc_clean( $product->description ) : '' ),
+							'post_author'  => get_current_user_id(),
+						);
+						
+					}else{
+						$new_product = array(
+							'post_title'   => wc_clean( $product->name ),
+							'post_status'  => ( isset( $product->status ) ? wc_clean( $product->status ) : 'publish' ),
+							'post_type'    => 'product',
+							'post_excerpt' => ( isset( $product->description ) ? wc_clean( $product->description ) : '' ),
+							'post_content' => ( isset( $product->description ) ? wc_clean( $product->description ) : '' ),
+							'post_author'  => get_current_user_id(),
+						);
+					}
+			
+					// Attempts to create the new product
+					$id = wp_insert_post( $new_product, true );
+			
+					// Checks for an error in the product creation
+					if ( is_wp_error( $id ) ) {
+						return new WP_Error( 'cp_api_cannot_create_product', $id->get_error_message(), array( 'status' => 400 ) );
+					}
+					// Save product meta fields
+					$meta = $this->save_product_meta( $id, $product );
+					wc_delete_product_transients( $id );
+					if ( is_wp_error( $meta ) ) {
+						return $meta;
+					}
 				}
 			}
 		}
@@ -433,7 +436,9 @@ if(!class_exists('CP_QBO_Client')){
 			}
 	
 			if ( isset( $product->name ) ) {
-				if(isset($product->full_name) && $product->full_name !='' ){
+				if(isset($product->sku) && $product->sku !='' ){
+					$new_sku 	= $product->sku;
+				}elseif(isset($product->full_name) && $product->full_name !='' ){
 					$new_sku 	= $product->full_name;	
 				}else{
 					$new_sku 	= $product->name;
@@ -486,6 +491,10 @@ if(!class_exists('CP_QBO_Client')){
 			} else {
 				wc_update_product_stock_status( $id, $stock_status );
 			}
+			update_post_meta( $id, 'qbo_product_id', $product->id );
+			update_post_meta( $id, 'qbo_data', $product );
+			update_post_meta( $id, 'qbo_last_updated', current_time('timestamp') );
+			wp_set_object_terms( $id , 'in-quickbooks', 'qb_status'. false );	
 		}
 		function cp_qbo_update_customer_info($id, $data){
 			if ( isset( $data['qbo_cust_id'] ) ) {
@@ -882,6 +891,9 @@ if(!class_exists('CP_QBO_Client')){
 function CP() {
 
 	return CP_QBO_Client::instance();
+}
+if(!CP()->client){
+	CP()->init_client();
 }
 
 // Global for backwards compatibility.

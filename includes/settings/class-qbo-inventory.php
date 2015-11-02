@@ -117,7 +117,7 @@ class QBO_Settings_Products extends QBO_Settings_Page {
 				);
 				if($current_section == 'sync' || $current_section == ''){
 					$wc_product_fields 	= array('sku'=> 'SKU', 'name'=> 'Product Name'); 
-					$qbo_product_field	= array('Item Name');
+					$qbo_product_field	= array('sku'=> 'SKU', 'name'=> 'Item Name');
 					$settings = apply_filters( 'qbo_product_sync_settings', array(
 					
 					array( 
@@ -126,6 +126,39 @@ class QBO_Settings_Products extends QBO_Settings_Page {
 						'desc' => '', 
 						'id' => 'qbo_product_sync' 
 					),
+					array(
+						'title'			=> __( 'WooCommerce product identifier to use during syncing ?', 'cartpipe' ),
+						'tip'          => __( '', 'cartpipe' ),
+						'desc'          => __( 'Which WooCommerce product field do you want to use to match to your items in QuickBooks', 'cartpipe' ),
+						'id'            => 'qbo[wc_identifier]',
+						'default'       => 'sku',
+						'type'          => 'select',
+						'options'		=> $wc_product_fields,
+						'autoload'      => false
+					),
+					array(
+						'title'			=> __( 'QuickBooks product identifier to use during syncing ?', 'cartpipe' ),
+						'tip'          => __( '', 'cartpipe' ),
+						'desc'          => __( 'Which QuickBooks item field do you want to use to match to your items in QuickBooks', 'cartpipe' ),
+						'id'            => 'qbo[qbo_identifier]',
+						'default'       => 'name',
+						'type'          => 'select',
+						'options'		=> $qbo_product_field,
+						'autoload'      => false
+					),
+					// array(
+						// 'title'             => __( 'Enable product identifier fallback?', 'cartpipe' ),
+						// 'desc'              => __( 'Would you like to fallback to the QuickBooks Item Name if the sku isn\'t set in QuickBooks?', 'cartpipe' ),
+						// 'id'                => 'qbo[qbo_fallback]',
+						// 'type'              => 'checkbox',
+						// 'css'               => '',
+						// 'default'           => '',
+						// 'dependency'		=> array(
+												// 'setting'	=> 'qbo[qbo_identifier]',
+												// 'value'		=> 'sku'
+											// ),
+						// 'autoload'          => false
+					// ),
 					array(
 						'title'			=> __( 'Sync Frequency?', 'cartpipe' ),
 						'tip'          => __( 'Check this box to have the website product prices be updated with prices from QuickBooks Online', 'cartpipe' ),

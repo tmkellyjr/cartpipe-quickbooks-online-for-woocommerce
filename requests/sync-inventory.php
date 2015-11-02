@@ -109,27 +109,46 @@
 					}else{
 						switch($wc_identifier){
 							case 'sku':
-								if(isset($product->sku) && $product->sku != ''){
-									$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $product->sku	 ) );
-								}elseif(isset($product->full_name) && $product->full_name != ''){
-									$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $product->full_name	 ) );
-								}elseif(isset($product->name)){
-									$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $product->name ) );
-								}else{
-									$product_id = false;	
-								};
+								switch ($qbo_identifier) {
+									case 'sku':
+										if(isset($product->sku) && $product->sku != ''){
+											$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $product->sku	 ) );
+										}else{
+											$product_id = false;		
+										}		
+										break;
+									
+									case 'name':
+										if(isset($product->full_name) && $product->full_name != ''){
+											$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $product->full_name	 ) );
+										}elseif(isset($product->name)){
+											$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $product->name ) );
+										}else{
+											$product_id = false;	
+										};		
+										break;
+								}
 							break;
 							case 'name':
-								if(isset($product->sku) && $product->sku != ''){
-									$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title='%s' LIMIT 1", $product->sku	 ) );
-								}elseif(isset($product->full_name) && $product->full_name != ''){
-									$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title='%s' LIMIT 1", $product->full_name	 ) );
-								}elseif(isset($product->name)){
-									$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title='%s' LIMIT 1", $product->name	 ) );
-								}else{
-									$product_id = false;	
+								switch ($qbo_identifier) {
+									case 'sku':
+										if(isset($product->sku) && $product->sku != ''){
+											$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $product->sku	 ) );
+										}else{
+											$product_id = false;		
+										}		
+										break;
+									
+									case 'name':
+										if(isset($product->full_name) && $product->full_name != ''){
+											$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $product->full_name	 ) );
+										}elseif(isset($product->name)){
+											$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $product->name ) );
+										}else{
+											$product_id = false;	
+										};		
+										break;
 								}
-								break;
 						}
 					}
 					
@@ -172,6 +191,7 @@
 						   	}
 						   	
 							update_post_meta( $fallout_id, 'qb_product', $product );	 
+							
 		    		  	 	CP()->cp_qbo_import_item( $product );
 					 	}
 					}

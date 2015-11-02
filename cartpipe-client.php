@@ -3,7 +3,7 @@
 Plugin URI: Cartpipe.com
 Description: Cartpipe Client for WooCommerce / QuickBooks Online Integration
 Author: Cartpipe.com
-Version: 1.0.15
+Version: 1.0.16
 Author URI: Cartpipe.com
 */
 
@@ -361,6 +361,7 @@ if(!class_exists('CP_QBO_Client')){
 		}
 		function cp_qbo_import_item( $product ){
 			if(isset($product->name)){
+				global $wpdb;
 				$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title='%s' LIMIT 1", $product->name	 ) );
 				if(!$product_id){
 					$export_mappings = isset( CP()->qbo->import_fields ) ? CP()->qbo->import_fields : null;

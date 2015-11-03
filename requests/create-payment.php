@@ -3,6 +3,7 @@
 	$WC_Order 				= wc_get_order( $ref_id );
 	$wc_payment_method 		= get_post_meta($ref_id, '_payment_method', true );
 	$qbo_pay_methods 		= CP()->qbo->payment_methods;
+	$discount 				= $WC_Order->get_total_discount();
 	if(sizeof($qbo_pay_methods) > 0){
 		$qbo_pay_method = $qbo_pay_methods[$wc_payment_method];
 	}
@@ -15,7 +16,9 @@
 			'order_total'			=> $WC_Order->get_total(), //+ $WC_Order->get_total_tax(),
 			'payment_method'		=> $qbo_pay_method,
 			'deposit_account'		=> CP()->qbo->deposit_account,
-			'posting_type'			=> 'payment'
+			'posting_type'			=> 'payment',
+			'order_discount'		=> $discount,
+			'discount_account'		=> CP()->qbo->discount_account,
 	);
 	
 	$qbo = CP()->client->qbo_add_order( $ref_id, cpencode( $data ), CP()->qbo->license );

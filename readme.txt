@@ -69,6 +69,12 @@ No. It only works with QuickBooks Online
 3. Order transfer settings
 
 == Changelog ==
+= 1.0.20 =
+* Fix * send subtotal through on invoice line items instead of total 
+
+= 1.0.19 =
+* Restore Discount functionality 
+
 = 1.0.14 =
 * Include support for refunds in WooCommerce 
 

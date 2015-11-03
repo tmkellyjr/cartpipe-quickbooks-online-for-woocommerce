@@ -31,6 +31,7 @@
 			'tax_class'		=> $value['tax_class'],
 			'web_id'		=> isset($value['variation_id']) && ($value['variation_id'] > 0 ) ? $value['variation_id'] : $value['product_id'],
 			'subtotal' 		=> $value['line_subtotal'],
+			'total' 		=> $value['line_total'],
 			'qbo_product_id'=> $qbo_id ? $qbo_id : '', 
 			'qbo_tax_code'	=> $qbo_tax_code
 		);

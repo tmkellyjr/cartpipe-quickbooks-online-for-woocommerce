@@ -28,7 +28,8 @@
 			'sku'			=> isset($value['variation_id']) && ($value['variation_id'] > 0 ) ? get_post_meta( $value['variation_id'], '_sku', true ) : get_post_meta( $value['product_id'], '_sku', true ) ,
 			'tax_class'		=> $value['tax_class'],
 			'web_id'		=> isset($value['variation_id']) && ($value['variation_id'] > 0 ) ? $value['variation_id'] : $value['product_id'],
-			'subtotal' 		=> $value['line_total'],
+			'subtotal' 		=> $value['line_subtotal'],
+			'total' 		=> $value['line_total'],
 			'qbo_product_id'=> $qbo_id ? $qbo_id : '',
 			'qbo_tax_code'	=> $qbo_tax_code
 		);

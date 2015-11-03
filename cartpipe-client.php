@@ -3,7 +3,7 @@
 Plugin URI: Cartpipe.com
 Description: Cartpipe Client for WooCommerce / QuickBooks Online Integration
 Author: Cartpipe.com
-Version: 1.0.17
+Version: 1.0.18
 Author URI: Cartpipe.com
 */
 

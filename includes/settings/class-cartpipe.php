@@ -67,7 +67,7 @@ class QBO_Settings_Credentials extends QBO_Settings_Page {
 			$client 				= CP()->client;
 			switch (CP()->qbo->license_info->status) {
 				case 'site_inactive':
-					if(CP()->qbo->license_info->activated_sites == 'none_activated'){
+					//if(CP()->qbo->license_info->activated_sites == 'none_activated'){
 						$buttons = array( 
 								array(
 									'url'=> '#', 
@@ -79,7 +79,7 @@ class QBO_Settings_Credentials extends QBO_Settings_Page {
 										'label'=>'Deactivate',
 									),
 							);
-					}
+					//}
 					if(CP()->qbo->license_info->free_trial_activated == 'yes'):
 						$status = sprintf('You\'ve already activated a free trial on %s. If you\'d like to continue using cartpipe, signup for one of our services <a href="%s">here</a>.', get_home_url(), CP_URL );
 					endif;
@@ -121,7 +121,7 @@ class QBO_Settings_Credentials extends QBO_Settings_Page {
 					break;
 				case 'valid':
 					//var_dump( CP()->qbo->license_info->activated_sites ); 
-					if(CP()->qbo->license_info->activated_sites == 'none_activated'){
+					//if(CP()->qbo->license_info->activated_sites == 'none_activated'){
 						$buttons = array( 
 								array(
 									'url'=> '#', 
@@ -135,21 +135,7 @@ class QBO_Settings_Credentials extends QBO_Settings_Page {
 									),
 							);
 						$status = sprintf('Please activate Cartpipe for QuickBooks Online for %s.', get_home_url() );
-					 }else{
-					$buttons = array( 
-									array(
-										'url'=> '#', 
-										'class'=>'button activate',
-										'label'=>'Activate',
-									),
-									array(
-										'url'=> '#', 
-										'class'=>'button deactivate',
-										'label'=>'Deactivate',
-									),
-								);
-						$status = sprintf('Cartpipe for QuickBooks Online has been activated for %s. ', get_home_url() );
-					}
+					
 					break;
 				case 'deactivated':
 					$buttons = array( 
@@ -187,6 +173,23 @@ class QBO_Settings_Credentials extends QBO_Settings_Page {
 					
 					break;
 				default:
+					$buttons = array( 
+									array(
+										'url'=> '#', 
+										'class'=>'button activate',
+										'label'=>'Activate',
+									),
+									array(
+										'url'=> '#', 
+										'class'=>'button deactivate',
+										'label'=>'Deactivate',
+									),
+								);
+					if( CP()->qbo->license_info->expires !='1970-01-01 00:00:00'){
+						$status = sprintf('Cartpipe for QuickBooks Online could not be activated for %s.', get_home_url() );	
+					}else{
+						$status = sprintf('Cartpipe for QuickBooks Online could not be activated for %s because your license is invalid.', get_home_url() );
+					}
 					
 					break;
 			}

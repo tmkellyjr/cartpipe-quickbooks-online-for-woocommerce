@@ -11,7 +11,7 @@ Author URI: Cartpipe.com
 if(!class_exists('CP_QBO_Client')){
 	define("CP_API", "https://api.cartpipe.com");
 	define("CP_URL", "https://www.cartpipe.com");
-	define("CP_VERSION", '1.0.17');
+	define("CP_VERSION", '1.0.20');
 	Class CP_QBO_Client{
 		/*
 		 * Instance

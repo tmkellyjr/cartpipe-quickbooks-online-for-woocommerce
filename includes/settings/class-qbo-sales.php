@@ -271,6 +271,7 @@ class QBO_Settings_Sales extends QBO_Settings_Page {
 					'default'           => '',
 					'autoload'          => false
 				),
+				
 				array(
 					'title'			=> __( '', 'cartpipe' ),
 					'desc'          => __( 'Refresh Accounts?', 'cartpipe' ),
@@ -283,7 +284,29 @@ class QBO_Settings_Sales extends QBO_Settings_Page {
 					'class'			=> 'button refresh accounts	',
 					'autoload'      => false
 				),
+				array(
+					'title'             => __( 'Discount Account', 'cartpipe' ),
+					'desc'              => __( 'Please select the Discount Account to use for recording discounts in QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[discount_account]',
+					'type'              => 'select',
+					'options'			=> $this->accounts,
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
 				
+				array(
+					'title'			=> __( '', 'cartpipe' ),
+					'desc'          => __( 'Refresh Accounts?', 'cartpipe' ),
+					'label'			 => __( 'Refresh', 'cartpipe' ),
+					//'id'            => 'qbo[sync_stock]',
+					'type'          => 'button',
+					'url'			=> '#',
+					'data-type'		=> 'accounts',
+					'linked'		=> 'qbo[discount_account]',
+					'class'			=> 'button refresh accounts	',
+					'autoload'      => false
+				),
 				array(
 					'title'             => __( 'Tax Rate Mappings', 'cartpipe' ),
 					'desc'              => __( 'Please map your website tax rates to the corresponding tax rate in QuickBooks Online.', 'cartpipe' ),
@@ -422,7 +445,29 @@ class QBO_Settings_Sales extends QBO_Settings_Page {
 					'class'			=> 'button refresh accounts	',
 					'autoload'      => false
 				),
+				array(
+					'title'             => __( 'Discount Account', 'cartpipe' ),
+					'desc'              => __( 'Please select the Discount Account to use for recording discounts in QuickBooks Online.', 'cartpipe' ),
+					'id'                => 'qbo[discount_account]',
+					'type'              => 'select',
+					'options'			=> $this->accounts,
+					'css'               => '',
+					'default'           => '',
+					'autoload'          => false
+				),
 				
+				array(
+					'title'			=> __( '', 'cartpipe' ),
+					'desc'          => __( 'Refresh Accounts?', 'cartpipe' ),
+					'label'			 => __( 'Refresh', 'cartpipe' ),
+					//'id'            => 'qbo[sync_stock]',
+					'type'          => 'button',
+					'url'			=> '#',
+					'data-type'		=> 'accounts',
+					'linked'		=> 'qbo[discount_account]',
+					'class'			=> 'button refresh accounts	',
+					'autoload'      => false
+				),
 				array(
 					'title'             => __( 'Tax Rate Mappings', 'cartpipe' ),
 					'desc'              => __( 'Please map your website tax rates to the corresponding tax rate in QuickBooks Online.', 'cartpipe' ),

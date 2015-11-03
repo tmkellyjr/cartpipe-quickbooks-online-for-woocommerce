@@ -5,6 +5,7 @@
 	$items 					= $refund->get_items();
 	$taxes 					= $refund->get_taxes();
 	$shipping				= $refund->get_shipping_methods(); 
+	$discount 				= $WC_Order->get_total_discount();
 	$qbo_tax_codes 			= CP()->qbo->tax_codes;
 	$qbo_id 				= false;
 	
@@ -57,6 +58,8 @@
 			'order_items' 			=> $new_items,
 			'order_total'			=> $refund->get_total(),
 			'order_subtotal'		=> $refund->get_subtotal(),
+			'order_discount'		=> $discount,
+			'discount_account'		=> CP()->qbo->discount_account,
 			'taxes'					=> $taxes,
 			'deposit_account'		=> CP()->qbo->deposit_account,
 			'posting_type'			=> 'refund'

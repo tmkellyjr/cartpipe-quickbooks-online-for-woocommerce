@@ -6,6 +6,9 @@
 	$shipping				= $WC_Order->get_shipping_methods(); 
 	$qbo_tax_codes 			= CP()->qbo->tax_codes;
 	$qbo_id 				= false;
+	$wc_identifier 			= isset( CP()->qbo->wc_identifier ) ? CP()->qbo->wc_identifier : 'sku';
+	$qbo_identifier 		= isset( CP()->qbo->qbo_identifier ) ? CP()->qbo->qbo_identifier : 'name';
+	
 	foreach($items as $key=>$value){
 		if($value['tax_class'] == ''){
 			$value['tax_class'] = 'standard';
@@ -58,7 +61,9 @@
 			'order_total'			=> $WC_Order->get_total(),
 			'order_subtotal'		=> $WC_Order->get_subtotal(),
 			'zero_tax'				=> CP()->qbo->zero_tax_code,
-			'posting_type'			=> 'salesreceipt'
+			'posting_type'			=> 'salesreceipt',
+			'qbo_identifier'		=> $qbo_identifier,
+			'wc_identifier'			=> $wc_identifier
 	);
 	if(sizeof($taxes) > 0){
 		$data['taxes'] = $taxes;

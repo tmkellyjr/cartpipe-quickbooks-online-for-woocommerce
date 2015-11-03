@@ -3,7 +3,7 @@
 Plugin URI: Cartpipe.com
 Description: Cartpipe Client for WooCommerce / QuickBooks Online Integration
 Author: Cartpipe.com
-Version: 1.0.16
+Version: 1.0.17
 Author URI: Cartpipe.com
 */
 
@@ -11,7 +11,7 @@ Author URI: Cartpipe.com
 if(!class_exists('CP_QBO_Client')){
 	define("CP_API", "https://api.cartpipe.com");
 	define("CP_URL", "https://www.cartpipe.com");
-	define("CP_VERSION", '1.0.15');
+	define("CP_VERSION", '1.0.17');
 	Class CP_QBO_Client{
 		/*
 		 * Instance
@@ -192,17 +192,17 @@ if(!class_exists('CP_QBO_Client')){
 			
 			global $post;
 			wp_enqueue_script( 'jquery' );
-			wp_register_style( 'cp-admin-css', plugins_url('/assets/css/cp.css', __FILE__), false, '1.0.0' );
-			wp_register_style( 'cp-font-css', plugins_url('/assets/css/cp-font.css', __FILE__), false, '1.0.0' );
-			wp_register_style( 'cp-font-awesome', plugins_url('/assets/css/font-awesome.min.css', __FILE__), false, '1.0.0' );
+			wp_register_style( 'cp-admin-css', plugins_url('/assets/css/cp.css', __FILE__), false, CP_VERSION );
+			wp_register_style( 'cp-font-css', plugins_url('/assets/css/cp-font.css', __FILE__), false, CP_VERSION );
+			wp_register_style( 'cp-font-awesome', plugins_url('/assets/css/font-awesome.min.css', __FILE__), false, CP_VERSION );
 			$order_nonce 	= wp_create_nonce( "transfer-order" );
 			$product_nonce 	= wp_create_nonce( "sync-product" );
 			$options_nonce	= wp_create_nonce( "cp-options-nonce" );
 			// Register plugin Scripts
 			wp_register_script( 'cp-charts-js', plugins_url('/assets/js/cp.chart.min.js', __FILE__) );
-			wp_register_script( 'cp-chart-functions', plugins_url('/assets/js/cp.chart.functions.js', __FILE__),'jquery','', true );
-			wp_register_script( 'cp-metabox-orders', plugins_url('/assets/js/cp.order.metabox.js', __FILE__),'jquery','', true );
-			wp_register_script( 'cp-metabox-products', plugins_url('/assets/js/cp.product.metabox.js', __FILE__),'jquery','', true );
+			wp_register_script( 'cp-chart-functions', plugins_url('/assets/js/cp.chart.functions.js', __FILE__),'jquery',CP_VERSION, true );
+			wp_register_script( 'cp-metabox-orders', plugins_url('/assets/js/cp.order.metabox.js', __FILE__),'jquery',CP_VERSION, true );
+			wp_register_script( 'cp-metabox-products', plugins_url('/assets/js/cp.product.metabox.js', __FILE__),'jquery',CP_VERSION, true );
  			wp_enqueue_style( 'cp-admin-css' );
 			wp_enqueue_style( 'cp-font-css' );
 			wp_enqueue_style( 'cp-font-awesome' );
@@ -214,7 +214,7 @@ if(!class_exists('CP_QBO_Client')){
 			
 			//if(isset( $hook ) && $hook == 'cart-pipe_page_qbo-settings'){
 				
-				wp_register_script( 'cp-options', plugins_url('/assets/js/cp.options.js', __FILE__),array('jquery', 'jquery-blockui'),'', true );
+				wp_register_script( 'cp-options', plugins_url('/assets/js/cp.options.js', __FILE__),array('jquery', 'jquery-blockui'),CP_VERSION, true );
 				$options_metabox_data = array(
 					'refresh_nonce'			=>	$options_nonce,
 					'ajax_url'				=> 	admin_url('admin-ajax.php'),

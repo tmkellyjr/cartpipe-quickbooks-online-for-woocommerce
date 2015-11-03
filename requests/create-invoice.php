@@ -4,6 +4,7 @@
 	$items 					= $WC_Order->get_items();
 	$taxes 					= $WC_Order->get_taxes();
 	$shipping				= $WC_Order->get_shipping_methods(); 
+	$discount 				= $WC_Order->get_total_discount();
 	$qbo_tax_codes 			= CP()->qbo->tax_codes;
 	$qbo_id 				= false;
 	$wc_identifier 			= isset( CP()->qbo->wc_identifier ) ? CP()->qbo->wc_identifier : 'sku';
@@ -58,6 +59,8 @@
 			'order_items' 			=> $new_items,
 			'order_total'			=> $WC_Order->get_total(),
 			'order_subtotal'		=> $WC_Order->get_subtotal(),
+			'order_discount'		=> $discount,
+			'discount_account'		=> CP()->qbo->discount_account,
 			'zero_tax'				=> CP()->qbo->zero_tax_code,
 			'posting_type'			=> 'invoice',
 			'qbo_identifier'		=> $qbo_identifier,
